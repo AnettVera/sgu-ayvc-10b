@@ -3,8 +3,8 @@ pipeline{
     stages{
         stage('Preparando los servicios del proyecto sgu'){
             steps{
-                bat ''''
-                    docker compose -p sgu-ayvc-10b adj down || exit /b 0
+                bat '''
+                    docker compose -p sgu-ayvc-10b down || exit /b 0
                 '''
             }
         }
@@ -12,12 +12,12 @@ pipeline{
         stage('Eliminando imagenes anteriores del proyecto'){
             steps{
                 bat '''
-                    for /f "tokens=* %%i in ('docker images --filter "label=com.docker.compose.project=sgu-ayvc-10b"-q') do (
+                    for /f "tokens=*" %%i in ('docker images --filter "label=com.docker.compose.project=sgu-ayvc-10b" -q') do (
                         docker rmi -f %%i
                     )
-                    if errorlavel 1(
-                        echo No hay imagenes para eliminar
-                    )else(
+                    if errorlevel 1 (
+                        echo No hay imagenes por eliminar
+                    ) else (
                         echo Imagenes eliminadas correctamente
                     )
                 '''
